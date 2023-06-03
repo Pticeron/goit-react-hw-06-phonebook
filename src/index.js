@@ -6,7 +6,12 @@ import { store } from './redux/store';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
+  <React.StrictMode>
+    <Provider store={store}>
+    <PersistGate loading={ null }  persistor={ persistor }>
     <App />
+    </PersistGate>
     </Provider>
+  </React.StrictMode>
+  
 );
