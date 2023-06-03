@@ -1,15 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { changeFilter } from 'redux/filterSlice';
+import { setFilter } from 'redux/filterSlice';
 import { getFilter } from 'redux/selectors';
 
 import propTypes from 'prop-types';
 import css from './Filter.module.css';
 
 export const Filter = () => {
-  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
-
-  const handleChange = e => e.dispatch(changeFilter(e.target.value));
+  const filter = useSelector(getFilter);
+  
 
   return (
     <div>
@@ -20,7 +19,7 @@ export const Filter = () => {
         name="filter"
         placeholder="Enter filter"
         value={filter}
-        onChange={handleChange}
+        onChange={e => e.dispatch(setFilter(e.target.value.trim()))}
       />
     </div>
   );

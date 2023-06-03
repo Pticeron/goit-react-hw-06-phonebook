@@ -1,7 +1,28 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getFilter } from 'redux/selectors';
+import { deleteContact } from 'redux/contactsSlice';
+
 import propTypes from 'prop-types';
 import css from './ContactList.module.css';
 
-export const ContactList = ({ contacts, handleDelete }) => {
+export const ContactList = () => {
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
+
+  const filteredContacts = contacts?.filter(contact =>
+    contact?.name?.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  const onDeleteContact = id => {
+    dispatch(deleteContact(id)); 
+   };
+
+   if (!filteredContacts?.length) {
+    return <div className={css.text}>No contacts found.</div>;
+  }
+
+
   return (
     <div className={css.wraperContactList}>
       <ul className={css.conactList}>
@@ -11,7 +32,7 @@ export const ContactList = ({ contacts, handleDelete }) => {
             <button
               type="button"
               className={css.contactListItemBtn}
-              onClick={() => handleDelete(contact.id)}
+              onClick={() => onDeleteContact(contact.id)}
             >
               Delete
             </button>
