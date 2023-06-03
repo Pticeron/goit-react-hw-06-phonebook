@@ -1,26 +1,40 @@
 import propTypes from 'prop-types';
-import { useState } from 'react';
+import { Formik, ErrorMessage } from 'formik';
 import css from './ContactForm.module.css';
 
-export const ContactForm = ({ handleSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
+import { nanoid } from 'nanoid';
+import { addContact } from 'redux/contactsSlice';
 
-  const onChangeInput = evt => {
-    const { name, value } = evt.currentTarget;
-
-    name === 'name' ? setName(value) : setNumber(value);
+export const ContactForm = () => {
+  const INITIAL_VALUES = {
+    name: '',
+    number: '',
   };
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  const handleSubmit = (values, { resetForm}) => {
+     contactName = values.name.toLowerCase();
+     const isSaved = contacts.find(
+      contact => contact.name.toLowerCase() === contactName
+     );
+     if(isSaved) {
+      alert(`${values.name} is already in contacts`);
+     } else {
+      dispatch(addContact({...values, id: nanoid()}));
+     }
+     resetForm();
+    };
+
+    
 
   return (
       <form className={css.form} 
-      onSubmit={evt => {
-            evt.preventDefault(); 
-            handleSubmit({ name, number });
-            setName(""); 
-            setNumber(""); 
-          }}
-      >
+      onSubmit={handleSubmit}
+      initialValues = {{INITIAL_VALUES}}
+        >
         <label className={css.formLabel}>Name </label>
         <input
           className={css.formName}
