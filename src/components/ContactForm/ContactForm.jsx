@@ -4,39 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 import { getContacts } from 'redux/selectors';
 import { nanoid } from 'nanoid';
-import { toast } from 'react-toastify'; 
 
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
 
-  const handleSubmit = evt => {
-    evt.preventDefault();
+  const onFormSubmit = (values, { resetForm }) => {
+    const loweredName = values.name.toLowerCase();
+
+    contacts.find(contact => contact.name.toLowerCase() === loweredName)
+      ? alert(`${values.name} is already in contacts`)
+      : dispatch(addContact(values)) && resetForm();
   };
-
-  const contact = {
-    id: nanoid(),
-    name: evt.currentTarget.elements.name.value,
-    number: evt.currentTarget.elements.number.value,
-    console.log(contact);
-  };
-
-  const isSaved = contacts.find(
-    ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
-  );
-
-  if(isSaved) {
-    return toast.warn(`${contact.name} is already in contacts.`);
-  }
-
-  dispatch(addContact(contact));
-  evt.currentTarget.reset();
 
 
   return (
     <form className={css.form} 
-    onSubmit={handleSubmit}>
+    onSubmit={onFormSubmit}>
       <label className={css.formLabel}>Name </label>
       <input
         className={css.formName}
