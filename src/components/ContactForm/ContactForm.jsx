@@ -3,53 +3,103 @@ import css from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 import { getContacts } from 'redux/selectors';
-import { nanoid } from 'nanoid';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 
 export const ContactForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   const contacts = useSelector(getContacts);
 
-  const onFormSubmit = (values, { resetForm }) => {
-    const loweredName = values.name.toLowerCase();
+  const formData = data => {
+    const equalName = contacts.find(
+      el => el.name.toLowerCase() === data.name.toLowerCase()
+    );
+    const equalNumber = contacts.find(
+      el => el.number.toLowerCase() === data.number.toLowerCase()
+    );
 
-    contacts.find(contact => contact.name.toLowerCase() === loweredName)
-      ? alert(`${values.name} is already in contacts`)
-      : dispatch(addContact(values)) && resetForm();
+    if (equalName)
+      return alert(`This name ${equalName.name} is already in contacts.`);
+    if (equalNumber)
+      return alert(
+        `This number ${equalNumber.number} is already in contacts and belongs to ${equalNumber.name}.`
+      );
+
+    dispatch(addContact(data));
   };
 
+  const handleSubmit = (values, action) => {
+    formData(values);
+    action.resetForm();
+  };
 
   return (
-    <form className={css.form} 
-    onSubmit={onFormSubmit}>
-      <label className={css.formLabel}>Name </label>
-      <input
-        className={css.formName}
-        type="text"
-        name="name"
-        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-        placeholder="Enter name"
-        id={nanoid()}
-        required
-      />
-      <label className={css.formLabel}>Number </label>
-      <input
-        className={css.formNumber}
-        type="tel"
-        name="number"
-        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-        id={nanoid()}
-        required
-        placeholder="Enter phone number"
-        />
-      <button className={css.formBtn} type="submit">
-        Add contact
-      </button>
-    </form>
+    <Formik initialValues={{ name: '', number: '' }} onSubmit={handleSubmit}>
+      <Form className={css.form}>
+        <label className={css.formLabel}>
+          Name
+          <Field
+            type="text"
+            name="name"
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
+            className={css.formName}
+          />
+          <ErrorMessage name="name" component="div" />
+        </label>
+        <label className={css.formLabel}>
+          Number
+          <Field
+            type="tel"
+            name="number"
+            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            required
+            className={css.formName}
+          />
+        </label>
+        <ErrorMessage name="number" component="div" />
+        <button type="submit" className={css.formBtn} >
+          Add contact
+        </button>
+      </Form>
+    </Formik>
   );
 };
+  //     <form className={css.form}
+  //     initialValues={{ name: '', number: '' }}
+  //            onSubmit={handleSubmit}
+  //       >
+  //       <label className={css.formLabel}>Name </label>
+  //       <input
+  //         className={css.formName}
+  //         type="text"
+  //         name="name"
+  //         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+  //         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+  //         required
+  //         placeholder="Enter name"
+  //         onChange={onChangeInput}
+  //       />
+  //       <label className={css.formLabel}>Number </label>
+  //       <input
+  //         className={css.formNumber}
+  //         type="tel"
+  //         name="number"
+  //         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+  //         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+  //         required
+  //         placeholder="Enter phone number"
+  //         onChange={onChangeInput}
+  //       />
+  //       <button className={css.formBtn} type="submit">
+  //         Add contact
+  //       </button>
+  //     </form>
+  //   );
+  // }
+
 
 ContactForm.propTypes = {
   handleSubmit: propTypes.func.isRequired,

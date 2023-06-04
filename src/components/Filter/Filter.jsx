@@ -1,14 +1,19 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setFilter } from 'redux/filterSlice';
-import { getFilter } from 'redux/selectors';
+import debounce from 'lodash.debounce';
 
 import propTypes from 'prop-types';
 import css from './Filter.module.css';
 
 export const Filter = () => {
-  const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
+   const dispatch = useDispatch();
+
+   const onChange = e => {
+    const value = e.target.value.toLowerCase();
+    dispatch(setFilter(value));
+  };
   
+  const delayedOnChange = debounce(onChange, 300);
 
   return (
     <div>
@@ -18,8 +23,7 @@ export const Filter = () => {
         type="text"
         name="filter"
         placeholder="Enter filter"
-        value={filter}
-        onChange={e => e.dispatch(setFilter(e.target.value.trim()))}
+        onChange={delayedOnChange}
       />
     </div>
   );
