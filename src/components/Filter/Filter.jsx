@@ -1,18 +1,17 @@
 import { useDispatch } from 'react-redux';
 import { setFilter } from 'redux/filterSlice';
 import debounce from 'lodash.debounce';
-
 import propTypes from 'prop-types';
 import css from './Filter.module.css';
 
 export const Filter = () => {
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-   const onChange = e => {
+  const onChange = e => {
     const value = e.target.value.toLowerCase();
     dispatch(setFilter(value));
   };
-  
+
   const delayedOnChange = debounce(onChange, 300);
 
   return (
@@ -31,5 +30,5 @@ export const Filter = () => {
 
 Filter.propTypes = {
   filter: propTypes.string.isRequired,
-  handleChange: propTypes.func.isRequired,
+  onChange: propTypes.func.isRequired,
 };

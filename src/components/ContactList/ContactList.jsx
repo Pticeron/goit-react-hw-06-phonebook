@@ -23,14 +23,12 @@ export const ContactList = () => {
 
 
   return (
+   
     <div className={css.wraperContactList}>
       <ul className={css.conactList}>
-        {getVisibleContacts().map((id, name, number) => (
+        {getVisibleContacts().map((contact, id) => (
           <li key={id} className={css.contactListItem}>
-          <div>
-            <p className={css.contact__list__text}>{name}</p>
-            <p className={css.text__color}>tel: {number}</p>
-          </div>
+          {contact.name}: {contact.number}
             <button
               type="button"
               className={css.contactListItemBtn}
@@ -42,6 +40,7 @@ export const ContactList = () => {
         ))}
       </ul>
     </div>
+    
   );
 };
 
