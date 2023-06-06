@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
-import { deleteContact } from 'redux/contactsSlice';
+import { deleteContact, getContacts  } from 'redux/contactsSlice';
+import { getFilter } from 'redux/filterSlice';
 import css from './ContactList.module.css';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
-  const filterValue = useSelector(state => state.filter.filter).toLowerCase();
+  const filterValue = useSelector(getFilter).toLowerCase();
   
 
   const getVisibleContacts = () => {
@@ -21,7 +21,6 @@ export const ContactList = () => {
 
 
   return (
-   
     <div className={css.wraperContactList}>
       <ul className={css.conactList}>
         {getVisibleContacts().map((contact, id) => (

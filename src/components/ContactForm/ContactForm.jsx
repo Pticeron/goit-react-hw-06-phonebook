@@ -1,12 +1,11 @@
+import PropTypes from 'prop-types';
 import css from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
-import { getContacts } from 'redux/selectors';
+import { addContact, getContacts } from 'redux/contactsSlice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-
 export const ContactForm = () => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
 
   const formData = data => {
@@ -33,7 +32,7 @@ export const ContactForm = () => {
   };
 
   return (
-    <Formik initialValues={{ name: '', number: '' }} onSubmit={handleSubmit}>
+    <Formik initialValues={{ name:'', number:'' }} onSubmit={handleSubmit}>
       <Form className={css.form}>
         <label className={css.formLabel}>
           Name
@@ -59,11 +58,14 @@ export const ContactForm = () => {
           />
         </label>
         <ErrorMessage name="number" component="div" />
-        <button type="submit" className={css.formBtn} >
+        <button type="submit" className={css.formBtn}>
           Add contact
         </button>
       </Form>
     </Formik>
   );
 };
-  
+
+ContactForm.propTypes = {
+  handleSubmit: PropTypes.func,
+};
