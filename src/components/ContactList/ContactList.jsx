@@ -13,23 +13,21 @@ export const ContactList = () => {
       contact.name.toLowerCase().includes(filterValue)
     );
   };
- 
-  const onDeleteContact = id => {
-    dispatch(deleteContact(id));
+
+  const onDeleteContact = e => {
+    dispatch(deleteContact(e));
   };
 
   return (
     <div className={css.wraperContactList}>
       <ul className={css.conactList}>
-        {getVisibleContacts().map((id, name, number) => (
+        {getVisibleContacts().map(({ id, name, number }) => (
           <li key={id} className={css.contactListItem}>
-            <p>{name}</p>
-            <p>tel: {number}</p>
+          {name}: {number}
             <button
               type="button"
               className={css.contactListItemBtn}
-              onClick={() =>onDeleteContact(deleteContact(id))}
-            >
+              onClick={() => onDeleteContact(id)}>
               Delete
             </button>
           </li>
