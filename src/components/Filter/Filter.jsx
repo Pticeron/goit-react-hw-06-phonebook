@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { setFilter } from 'redux/filterSlice';
 import debounce from 'lodash.debounce';
-import propTypes from 'prop-types';
 import css from './Filter.module.css';
 
 export const Filter = () => {
@@ -28,6 +27,3 @@ export const Filter = () => {
   );
 };
 
-Filter.propTypes = {
-  onChange: propTypes.func,
-};
